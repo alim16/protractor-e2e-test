@@ -7,6 +7,7 @@ export class DemoFormIFrame {
  frameSelector = browser.findElement(by.css('.fancybox-iframe'))
 
  formHeading = element(by.css('.webform-heading'))
+
  cookie_accept_btn_selector = element(by.css('.hs-cookie-notification-position-bottom > div > div > a:first-child'));
  
  firstname_field = element(by.css('.hs_firstname .input > input'))
@@ -16,6 +17,7 @@ export class DemoFormIFrame {
  email_field = element(by.css('.hs_email .input > input'))
  phone_field = element(by.css('.hs_phone .input > input'))
  country_dropdown = element(by.css('.hs_country .input > select'))
+
 
 
  confirmIframeIsDisplayed() {
@@ -32,8 +34,5 @@ export class DemoFormIFrame {
        this.country_dropdown.$(`[value="${userDetailsUK.country}"]`).click();
  }
 
- closeForm(){
-     //browser.actions().mouseMove({x: 0, y: 0}).click().perform();
- }
 
 }
