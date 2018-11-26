@@ -4,11 +4,16 @@ import {browser, element, by} from 'protractor';
 export class Homepage {
 //   nameInput = element(by.model('yourName'));
 //   greeting = element(by.binding('yourName'));
-cookie_accept_btn_selector = element(by.css('.hs-cookie-notification-position-bottom > div > div > a:first-child'));
+  cookie_accept_btn_selector = element(by.css('.hs-cookie-notification-position-bottom > div > div > a:first-child'));
+  demoLink = element(by.css('.top-menu .last'))
 
   navToHomePage() {
     browser.get('https://orgvue.com');
   }
+
+ openRequestDemoForm(){
+    this.demoLink.click()
+ }
 
   acceptCookieMessage(): any{
     return this.cookie_accept_btn_selector.click()

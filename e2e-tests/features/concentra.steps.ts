@@ -1,53 +1,68 @@
 import { expect } from '../config/helpers/chai-imports';
 import { defineSupportCode } from 'cucumber';
 import { browser, by, element } from 'protractor';
-import {Homepage} from './pages/homePage';
+import {Homepage} from '../pages/homePage';
+import { DemoFormIFrame} from '../pages/demoFormIframePage'
+import {userDetailsUK} from '../util/userData'
+
 
 defineSupportCode(({Given, When, Then}) => {
     Given(/^I visit the OrgVue homepage$/, givenVisitHomepage);
      async function givenVisitHomepage(): Promise<void>{
-        // const cookie_accept_btn_selector = '.hs-cookie-notification-position-bottom > div > div > a:first-child'
         let homepage = new Homepage();
         browser.waitForAngularEnabled(false);
-        browser.driver.get('https://orgvue.com');
+        homepage.navToHomePage()
         await homepage.acceptCookieMessage()
-        // await browser.findElement(by.css(cookie_accept_btn_selector)).click()
     }
 
     Given(/^I request a demo$/, requestDemo); 
-        // Write code here that turns the phrase above into concrete actions
-        async function requestDemo(): Promise<void>{
-            const demoLink = element(by.css('.top-menu .last'))
-
-
-            demoLink.click()
-            const formIframe = browser.findElement(by.css('.fancybox-iframe'))
-            browser.switchTo().frame(formIframe)
-            const formHeading = browser.findElement(by.css('.webform-heading'))
-
-            await expect(formHeading.isDisplayed()).to.eventually.equal(true)
-
-            // await browser.driver.findElement(by.css('.clearfix .hbspt-form')).isDisplayed().then(function (isVisible) {
-            //     if (isVisible) {
-            //         // element is visible
-            //         console.log("it is visible")
-            //     } else {
-            //         // element is not visible
-            //     }
-            // });
+     async function requestDemo(): Promise<void>{
+            let homepage = new Homepage();
+           
+            homepage.openRequestDemoForm()
+            let iframePage = new DemoFormIFrame();
+            browser.switchTo().frame(iframePage.frameSelector)
+            
+            await expect(iframePage.formHeading.isDisplayed()).to.eventually.equal(true)
+            //await  iframePage.confirmIframeIsDisplayed()
     }
 
-    When('I fill in my details', function (callback) {
-        // Write code here that turns the phrase above into concrete actions
-        callback(null, 'pending');
+    When(/^I fill in my details$/, fillInForm);
+     async function fillInForm(): Promise<void>{
+            browser.switchTo().defaultContent()
 
-        const firstname_field = browser.findElement(by.css('.hs_firstname .input > input'))
-        firstname_field.sendKeys('hello')
-    });
+            let iframePage = new DemoFormIFrame()
+            browser.switchTo().frame(iframePage.frameSelector)
 
-    Then('my details will be visible in the form', function (callback) {
-        // Write code here that turns the phrase above into concrete actions
-        callback(null, 'pending');
-      });
+          await iframePage.fillInform()
+           // await browser.driver.sleep(3000)
+    }
+
+    Then(/^my details will be visible in the form$/,checkForm) ;
+     async function checkForm(): Promise<void>{``
+       browser.switchTo().defaultContent()
+
+       //let iframePage = new DemoFormIFrame()
+       //browser.switchTo().frame(iframePage.frameSelector)
+       //iframePage.closeForm()
+       //await expect(iframePage.firstname_field.getText()).to.eventually.equal(userDetailsUK.first_name)
+       //await expect(iframePage.email_field.getText()).to.eventually.equal(userDetailsUK.email)
+       //  await browser.driver.sleep(3000)
+       
+        // let _el = element(by.css('.fancybox-overlay'));
+        // browser.actions().
+        // mouseMove(_el).
+        // mouseMove({x: 0, y: 0}).
+        // doubleClick().
+        // perform();
+
+        // let homepage = new Homepage();
+           
+        // homepage.openRequestDemoForm()
+        await browser.driver.sleep(4000)
+  
+         
+        
+    }
 
 })
