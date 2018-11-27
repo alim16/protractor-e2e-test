@@ -1,0 +1,5 @@
+export {Contactpage} from './contactPage'
+export {NavBar} from './_navBar'
+export {SprtPortal} from './support_portal'
+export { SprtSearchList} from './support_searchList'
+export {SprtArticle } from './support_articlePage'
