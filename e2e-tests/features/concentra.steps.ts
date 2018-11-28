@@ -1,24 +1,28 @@
-import { expect } from '../config/helpers/chai-imports';
-import { defineSupportCode } from 'cucumber';
-import { browser, by, element } from 'protractor';
-import {Homepage} from '../pages/homePage'
-import {DemoFormIFrame} from '../pages/demoFormIframePage'
-import {Contactpage, NavBar, SprtPortal, SprtSearchList, SprtArticle} from '../pages/'
+import { expect } from '../config/helpers/chai-imports'
+import { defineSupportCode } from 'cucumber'
+import { browser, by, element } from 'protractor'
+import {userDetailsUK} from '../util/userData'
+import {DemoFormIFrame, Contactpage,
+        NavBar,SprtPortal,
+        SprtSearchList,SprtArticle,
+      } from '../pages/'
+
 
 
 defineSupportCode(({Given, When, Then}) => {
     Given(/^I visit the OrgVue homepage$/, givenVisitHomepage);
      async function givenVisitHomepage(): Promise<void>{
-        let homepage = new Homepage();
+        let navbar = new NavBar()
         browser.waitForAngularEnabled(false);
-        homepage.navToHomePage()
-        await homepage.acceptCookieMessage()
+        browser.driver.manage().deleteAllCookies() // a necessary evil :)
+        navbar.navToHomePage()
+         await navbar.acceptCookieMessage()
     }
 
     Given(/^I request a demo$/, requestDemo); 
      async function requestDemo(): Promise<void>{
-            let homepage = new Homepage();
-            homepage.openRequestDemoForm()
+            let navbar = new NavBar()
+            navbar.openRequestDemoForm()
 
             let iframePage = new DemoFormIFrame();
             browser.switchTo().frame(iframePage.frameSelector)
@@ -28,22 +32,20 @@ defineSupportCode(({Given, When, Then}) => {
 
     When(/^I fill in my details$/, fillInForm);
      async function fillInForm(): Promise<void>{
-           browser.switchTo().defaultContent()
+        browser.switchTo().defaultContent()
 
-            let iframePage = new DemoFormIFrame()
-           browser.switchTo().frame(iframePage.frameSelector)
+        let iframePage = new DemoFormIFrame()
+        browser.switchTo().frame(iframePage.frameSelector)
 
-           await iframePage.fillInform()    
+        await iframePage.fillInform()    
     }
 
     Then(/^my details will be visible in the form$/,checkForm) ;
      async function checkForm(): Promise<void>{
-        //browser.driver.findElement(by.css('.fancybox-close')).click()
-        
-        //await homepage.closeIframe()
-        await browser.driver.sleep(3000)
-  
-        // let _el = element(by.css('.fancybox-overlay'));
+          // let iframePage = new DemoFormIFrame() 
+          // await expect(iframePage.getFirstName()).to.eventually.equal(userDetailsUK.first_name)
+          // await expect(iframePage.getSelectedCountry()).to.eventually.equal(userDetailsUK.country)  
+         await browser.driver.sleep(2000)
     }
 
     Given(/^I navigate to the "([^"]*)" page$/, navTo)
@@ -79,7 +81,6 @@ defineSupportCode(({Given, When, Then}) => {
 
     Then(/^Writer is "([^"]*)" and the last update was in "([^"]*)"$/,  verifyArticle)
      async function verifyArticle(author: string, dateYear: string): Promise<void> {
-        SprtArticle
         let sprtArticle = new SprtArticle()
 
          await expect(sprtArticle.getAuthor()).to.eventually.equal(author)

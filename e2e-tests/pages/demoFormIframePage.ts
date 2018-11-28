@@ -19,10 +19,13 @@ export class DemoFormIFrame {
  country_dropdown = element(by.css('.hs_country .input > select'))
 
 
+  getFirstName(){
+      return this.firstname_field.getText()
+  }
 
- confirmIframeIsDisplayed() {
-         expect(this.formHeading.isDisplayed()).to.eventually.equal(true)
- }
+  getSelectedCountry(){
+      return this.country_dropdown.getText()
+  }
 
  fillInform(){
        this.firstname_field.sendKeys(userDetailsUK.first_name)
